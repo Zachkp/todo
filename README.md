@@ -2,7 +2,7 @@
 
 A beautiful terminal-based todo application built with Go and [Bubbletea](https://github.com/charmbracelet/bubbletea). Manage your tasks with full CRUD functionality and persistent CSV storage.
 
-![Demo](demo.gif)
+![Demo](images/demo.gif)
 
 ## Features
 
@@ -111,32 +111,12 @@ todo
 ## Screenshots
 
 ### Main Table View
-```
-┌────────────────────────────────────────────────────────────────────┐
-│ ID   Title                    Description               Done       │
-├────────────────────────────────────────────────────────────────────┤
-│ 1    Buy groceries            Get milk, eggs, bread     [ ]        │
-│ 2    Finish project           Complete the Go todo app  [✓]        │
-│ 3    Read book                Finish chapter 5          [ ]        │
-└────────────────────────────────────────────────────────────────────┘
-[a] add  [e] edit  [d] delete  [space] toggle  [enter] details  [q] quit
-```
+
+![Main View](images/main-view.png)
 
 ### Detail View
-```
-╭──────────────────────────────────────────────────────────╮
-│                                                          │
-│  Finish project                                          │
-│                                                          │
-│  Status: Completed                                       │
-│                                                          │
-│  Description:                                            │
-│  Complete the Go todo app with Bubbletea                 │
-│                                                          │
-│  [enter/esc] back  [space] toggle  [d] delete           │
-│                                                          │
-╰──────────────────────────────────────────────────────────╯
-```
+
+![Detail View](images/Detail-view.png)
 
 ## Data Storage
 
