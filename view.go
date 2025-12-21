@@ -36,12 +36,28 @@ func (m model) renderTableView() string {
 		return baseStyle.Render(content) + "\n" + help + "\n"
 	}
 
+	// Show filter status
+	filterStatus := "All"
+	switch m.filter {
+	case showActive:
+		filterStatus = "Active"
+	case showCompleted:
+		filterStatus = "Completed"
+	}
+
+	filterText := lipgloss.NewStyle().
+		Foreground(lipgloss.Color("62")).
+		Width(m.width).
+		Align(lipgloss.Center).
+		Render(fmt.Sprintf("Filter: %s", filterStatus))
+
 	help := lipgloss.NewStyle().
 		Foreground(lipgloss.Color("241")).
 		Width(m.width).
 		Align(lipgloss.Center).
-		Render("[a] add  [e] edit  [d] delete  [space] toggle  [enter] details  [q] quit")
-	return baseStyle.Render(m.table.View()) + "\n" + help + "\n"
+		Render("[a] add  [e] edit  [d] delete  [space] toggle  [f] filter  [enter] details  [q] quit")
+
+	return baseStyle.Render(m.table.View()) + "\n" + filterText + "\n" + help + "\n"
 }
 
 func (m model) renderDetailView() string {

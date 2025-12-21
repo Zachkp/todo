@@ -26,10 +26,19 @@ const (
 	editView
 )
 
+type filterMode int
+
+const (
+	showAll filterMode = iota
+	showActive
+	showCompleted
+)
+
 type model struct {
 	table      table.Model
 	todos      []Todo
 	mode       viewMode
+	filter     filterMode
 	titleInput textinput.Model
 	descInput  textarea.Model
 	editingID  int

@@ -103,6 +103,11 @@ func (m model) handleTableViewKeys(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 			m.toggleComplete(todo.ID)
 		}
 		return m, nil
+	case "f":
+		// Cycle through filter modes: all -> active -> completed -> all
+		m.filter = (m.filter + 1) % 3
+		m.updateTable()
+		return m, nil
 	default:
 		// Pass other keys (like arrow keys) to the table
 		m.table, cmd = m.table.Update(msg)

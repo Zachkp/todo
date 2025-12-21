@@ -88,6 +88,14 @@ func (m *model) getCurrentTodo() *Todo {
 func (m *model) updateTable() {
 	rows := []table.Row{}
 	for _, todo := range m.todos {
+		// Apply filter
+		if m.filter == showActive && todo.Completed {
+			continue
+		}
+		if m.filter == showCompleted && !todo.Completed {
+			continue
+		}
+
 		completed := "[ ]"
 		if todo.Completed {
 			completed = "[✓]"
