@@ -12,6 +12,7 @@ A beautiful terminal-based todo application built with Go and [Bubbletea](https:
 - **Detail View** - Popup window showing full todo information
 - **Task Completion** - Toggle tasks as complete/incomplete
 - **Multi-line Descriptions** - Support for detailed todo descriptions
+- **Filtering** - Filter between All, Completed, and Active todos
 
 ## Installation
 
