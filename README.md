@@ -27,7 +27,13 @@ Install directly from GitHub using `go install`:
 go install github.com/zachkp/todo@latest
 ```
 
-This will download, build, and install the binary to `$GOPATH/bin` (usually `~/go/bin`), which is automatically in your PATH if Go is properly configured.
+This will download, build, and install the binary to `$GOPATH/bin` (usually `~/go/bin` on Linux/macOS or `%USERPROFILE%\go\bin` on Windows), which is automatically in your PATH if Go is properly configured.
+
+**Windows Note:** If the command isn't found after installation, you may need to add Go's bin directory to your PATH:
+```powershell
+# In PowerShell, add this to your profile or run it once:
+$env:PATH += ";$env:USERPROFILE\go\bin"
+```
 
 ### Build from Source
 
