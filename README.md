@@ -19,6 +19,16 @@ A beautiful terminal-based todo application built with Go and [Bubbletea](https:
 
 - Go 1.16 or higher
 
+### Quick Install (Recommended)
+
+Install directly from GitHub using `go install`:
+
+```bash
+go install github.com/zachkp/todo@latest
+```
+
+This will download, build, and install the binary to `$GOPATH/bin` (usually `~/go/bin`), which is automatically in your PATH if Go is properly configured.
+
 ### Build from Source
 
 ```bash
@@ -29,7 +39,25 @@ go build -o todo
 
 ### Install to PATH
 
+**Using Make:**
+
 ```bash
+# Build and install to ~/.local/bin
+make install
+
+# Add to PATH if not already done
+export PATH="$HOME/.local/bin:$PATH"  # Add to ~/.bashrc or ~/.zshrc
+
+# For fish shell users
+fish_add_path ~/.local/bin
+```
+
+**Manual Installation:**
+
+```bash
+# Build the binary
+make install
+
 # Copy to a directory in your PATH
 sudo cp todo /usr/local/bin/
 
