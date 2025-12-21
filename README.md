@@ -52,18 +52,13 @@ go build -o todo
 # Build and install to ~/.local/bin
 make install
 
-# Add to PATH if not already done
-export PATH="$HOME/.local/bin:$PATH"  # Add to ~/.bashrc or ~/.zshrc
-
-# For fish shell users
-fish_add_path ~/.local/bin
 ```
 
 **Manual Installation:**
 
 ```bash
 # Build the binary
-make install
+make build
 
 # Copy to a directory in your PATH
 sudo cp todo /usr/local/bin/
