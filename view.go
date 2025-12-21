@@ -18,6 +18,24 @@ func (m model) View() string {
 }
 
 func (m model) renderTableView() string {
+	// Show empty state if no todos
+	if len(m.todos) == 0 {
+		emptyMsg := lipgloss.NewStyle().
+			Foreground(lipgloss.Color("241")).
+			Width(m.width).
+			Align(lipgloss.Center).
+			Render("No todos yet! Press 'a' to add your first todo.")
+
+		help := lipgloss.NewStyle().
+			Foreground(lipgloss.Color("241")).
+			Width(m.width).
+			Align(lipgloss.Center).
+			Render("[a] add  [q] quit")
+
+		content := "\n\n" + emptyMsg + "\n\n"
+		return baseStyle.Render(content) + "\n" + help + "\n"
+	}
+
 	help := lipgloss.NewStyle().
 		Foreground(lipgloss.Color("241")).
 		Width(m.width).

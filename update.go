@@ -67,6 +67,8 @@ func (m model) handleKeyPress(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 }
 
 func (m model) handleTableViewKeys(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
+	var cmd tea.Cmd
+
 	switch msg.String() {
 	case "q", "ctrl+c":
 		return m, tea.Quit
@@ -101,8 +103,11 @@ func (m model) handleTableViewKeys(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 			m.toggleComplete(todo.ID)
 		}
 		return m, nil
+	default:
+		// Pass other keys (like arrow keys) to the table
+		m.table, cmd = m.table.Update(msg)
 	}
-	return m, nil
+	return m, cmd
 }
 
 func (m model) handleDetailViewKeys(msg tea.KeyMsg) (tea.Model, tea.Cmd) {

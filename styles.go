@@ -20,4 +20,12 @@ var (
 	titleStyle = lipgloss.NewStyle().
 			Foreground(lipgloss.Color("62")).
 			Bold(true)
+
+	// completedStyle is used for completed checkmarks (green)
+	completedStyle = lipgloss.NewStyle().
+			Foreground(lipgloss.Color("42"))
+
+	// incompleteStyle is used for incomplete checkmarks (gray)
+	incompleteStyle = lipgloss.NewStyle().
+			Foreground(lipgloss.Color("240"))
 )
