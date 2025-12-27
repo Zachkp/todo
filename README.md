@@ -2,7 +2,7 @@
 
 A beautiful terminal-based todo application built with Go and [Bubbletea](https://github.com/charmbracelet/bubbletea). Manage your tasks with full CRUD functionality and persistent CSV storage.
 
-![Demo](images/demo.gif)
+![Demo](images/demo2.gif)
 
 ## Features
 
