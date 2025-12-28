@@ -90,7 +90,6 @@ func (m model) renderDetailView() string {
 		content += fmt.Sprintf("Completed: %s\n", todo.CompletedAt.Format("Jan 2, 2006 at 3:04 PM"))
 	}
 
-	// Sub-todos section
 	if len(todo.SubTodos) > 0 {
 		content += "\nSub-Todos:\n"
 		for i, sub := range todo.SubTodos {

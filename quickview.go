@@ -8,23 +8,18 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
-// getSessionLockFile returns the path to the session lock file
 func getSessionLockFile() string {
-	// Use /tmp which gets cleared on reboot
 	tmpDir := os.TempDir()
-	// Use UID to make it user-specific
 	uid := os.Getuid()
 	return filepath.Join(tmpDir, fmt.Sprintf("todo-shown-%d", uid))
 }
 
-// hasShownThisSession checks if quick view was already shown this login session
 func hasShownThisSession() bool {
 	lockFile := getSessionLockFile()
 	_, err := os.Stat(lockFile)
-	return err == nil // File exists = already shown
+	return err == nil
 }
 
-// markShownThisSession creates a lock file to indicate quick view was shown
 func markShownThisSession() error {
 	lockFile := getSessionLockFile()
 	file, err := os.Create(lockFile)
@@ -35,27 +30,19 @@ func markShownThisSession() error {
 	return nil
 }
 
-// isInteractiveShell checks if we're in a proper interactive shell
-// Prevents running during boot, login managers (ly, gdm), or grub
 func isInteractiveShell() bool {
-	// Check for SHELL environment variable - this is set in interactive shells
 	shell := os.Getenv("SHELL")
 	if shell == "" {
-		// No SHELL env var = likely not in a user shell (boot/login manager)
 		return false
 	}
 
-	// Check for SHLVL (shell level) - should be >= 1 for interactive shells
-	// During boot/login managers, this is often unset or 0
 	shlvl := os.Getenv("SHLVL")
 	if shlvl == "" || shlvl == "0" {
 		return false
 	}
 
-	// Additional check: TERM should be set (but allow "linux" for TTY sessions)
 	term := os.Getenv("TERM")
 	if term == "" || term == "dumb" {
-		// Empty or dumb terminal = likely not interactive
 		return false
 	}
 
@@ -63,31 +50,26 @@ func isInteractiveShell() bool {
 }
 
 func showQuickView(force bool) {
-	// Don't run in non-interactive environments (boot, login managers, etc.)
 	if !isInteractiveShell() {
 		return
 	}
 
-	// Check if already shown this session (unless forced)
 	if !force && hasShownThisSession() {
-		// Silently exit - already shown this session
 		return
 	}
+
 	todos, err := loadTodos()
 	if err != nil {
 		fmt.Println("Error loading todos:", err)
 		os.Exit(1)
 	}
 
-	// Filter to active todos only
 	activeTodos := []Todo{}
 	for _, todo := range todos {
 		if !todo.Completed {
 			activeTodos = append(activeTodos, todo)
 		}
 	}
-
-	// Styles
 	titleStyle := lipgloss.NewStyle().
 		Bold(true).
 		Foreground(lipgloss.Color("205")).
@@ -111,7 +93,6 @@ func showQuickView(force bool) {
 		Foreground(lipgloss.Color("241")).
 		Italic(true)
 
-	// Print header
 	fmt.Println(titleStyle.Render("📋 Active Todos"))
 
 	if len(activeTodos) == 0 {
@@ -120,19 +101,15 @@ func showQuickView(force bool) {
 		return
 	}
 
-	// Print each active todo
 	for i, todo := range activeTodos {
-		// Todo title with ID
 		fmt.Printf("%s %s\n",
 			todoTitleStyle.Render(fmt.Sprintf("%d.", todo.ID)),
 			todoTitleStyle.Render(todo.Title))
 
-		// Description (if present)
 		if todo.Description != "" {
 			fmt.Printf("   %s\n", descStyle.Render(todo.Description))
 		}
 
-		// Sub-todos with progress
 		if len(todo.SubTodos) > 0 {
 			completed := 0
 			for _, sub := range todo.SubTodos {
@@ -146,12 +123,10 @@ func showQuickView(force bool) {
 					subTodoStyle.Render(sub.Title))
 			}
 
-			// Progress indicator
 			progressText := fmt.Sprintf("(%d/%d done)", completed, len(todo.SubTodos))
 			fmt.Printf("   %s\n", progressStyle.Render(progressText))
 		}
 
-		// Add spacing between todos (but not after the last one)
 		if i < len(activeTodos)-1 {
 			fmt.Println()
 		}
@@ -161,6 +136,5 @@ func showQuickView(force bool) {
 	fmt.Println(descStyle.Render("💡 Run 'todo' to open the full app"))
 	fmt.Println()
 
-	// Mark as shown for this session
 	markShownThisSession()
 }

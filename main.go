@@ -17,9 +17,7 @@ func (m model) Init() tea.Cmd {
 }
 
 func main() {
-	// Check for --quick flag
 	if len(os.Args) > 1 && (os.Args[1] == "--quick" || os.Args[1] == "-q") {
-		// Check for --force flag to show even if already shown
 		force := len(os.Args) > 2 && (os.Args[2] == "--force" || os.Args[2] == "-f")
 		showQuickView(force)
 		return

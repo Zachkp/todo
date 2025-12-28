@@ -85,7 +85,6 @@ func (m model) handleTableViewKeys(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 			m.editingID = todo.ID
 			m.titleInput.SetValue(todo.Title)
 
-			// Rebuild description with sub-todos
 			desc := todo.Description
 			if len(todo.SubTodos) > 0 {
 				if desc != "" {
@@ -117,12 +116,10 @@ func (m model) handleTableViewKeys(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 		}
 		return m, nil
 	case "f":
-		// Cycle through filter modes: all -> active -> completed -> all
 		m.filter = (m.filter + 1) % 3
 		m.updateTable()
 		return m, nil
 	default:
-		// Pass other keys (like arrow keys) to the table
 		m.table, cmd = m.table.Update(msg)
 	}
 	return m, cmd
@@ -145,7 +142,6 @@ func (m model) handleDetailViewKeys(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 		m.selectedSubIdx = 0
 		return m, nil
 	case " ":
-		// Toggle sub-todo if we have sub-todos, otherwise toggle main todo
 		if len(todo.SubTodos) > 0 && m.selectedSubIdx < len(todo.SubTodos) {
 			m.toggleSubTodo(m.selectedSubIdx)
 		} else {

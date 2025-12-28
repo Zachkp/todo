@@ -17,7 +17,6 @@ func (m *model) addTodo(title, description string) {
 		}
 	}
 
-	// Parse sub-todos from description
 	desc, subTodos := parseSubTodosFromDescription(description)
 
 	newTodo := Todo{
@@ -35,7 +34,6 @@ func (m *model) addTodo(title, description string) {
 }
 
 func (m *model) updateTodo(id int, title, description string) {
-	// Parse sub-todos from description
 	desc, subTodos := parseSubTodosFromDescription(description)
 
 	for i, todo := range m.todos {
@@ -98,7 +96,6 @@ func (m *model) getCurrentTodo() *Todo {
 func (m *model) updateTable() {
 	rows := []table.Row{}
 	for _, todo := range m.todos {
-		// Apply filter
 		if m.filter == showActive && todo.Completed {
 			continue
 		}
@@ -140,7 +137,6 @@ func (m *model) toggleSubTodo(idx int) {
 	var todoIdx int
 	var found bool
 
-	// Find the current todo (works in both detail and edit views)
 	if m.mode == detailView {
 		currentTodo := m.getCurrentTodo()
 		if currentTodo == nil {
@@ -169,15 +165,12 @@ func (m *model) toggleSubTodo(idx int) {
 
 	m.todos[todoIdx].SubTodos[idx].Completed = !m.todos[todoIdx].SubTodos[idx].Completed
 
-	// Save immediately in detail view
 	if m.mode == detailView {
 		saveTodos(m.todos)
 		m.updateTable()
 	}
 }
 
-// parseSubTodosFromDescription extracts sub-todos from description lines starting with "- "
-// Returns the cleaned description and the extracted sub-todos
 func parseSubTodosFromDescription(description string) (string, []SubTodo) {
 	lines := strings.Split(description, "\n")
 	var descLines []string
@@ -187,9 +180,7 @@ func parseSubTodosFromDescription(description string) (string, []SubTodo) {
 	for _, line := range lines {
 		trimmed := strings.TrimSpace(line)
 
-		// Check if line starts with "- "
 		if strings.HasPrefix(trimmed, "- ") {
-			// Extract sub-todo text
 			subText := strings.TrimPrefix(trimmed, "- ")
 			subText = strings.TrimSpace(subText)
 
@@ -202,12 +193,10 @@ func parseSubTodosFromDescription(description string) (string, []SubTodo) {
 				subID++
 			}
 		} else if trimmed != "" {
-			// Keep non-sub-todo lines in description
 			descLines = append(descLines, line)
 		}
 	}
 
-	// Join remaining description lines
 	cleanDesc := strings.Join(descLines, "\n")
 	cleanDesc = strings.TrimSpace(cleanDesc)
 
