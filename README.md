@@ -7,6 +7,7 @@ A beautiful terminal-based todo application built with Go and [Bubbletea](https:
 ## Features
 
 - **Full CRUD Operations** - Create, Read, Update, and Delete todos
+- **Quick View Mode** - Compact terminal startup view with `todo --quick`
 - **Sub-Todos** - Break down tasks into checkable sub-items using `- ` in description
 - **Persistent Storage** - All todos saved to CSV file in `~/Documents/todos.csv`
 - **Interactive TUI** - Beautiful terminal user interface with keyboard navigation
@@ -15,6 +16,7 @@ A beautiful terminal-based todo application built with Go and [Bubbletea](https:
 - **Multi-line Descriptions** - Support for detailed todo descriptions
 - **Filtering** - Filter between All, Completed, and Active todos
 - **Progress Tracking** - Automatic progress indicators (e.g., "2/5 done") for sub-todos
+- **Shell Integration** - Add to your rc file to see todos on every terminal launch
 
 ## Installation
 
@@ -76,11 +78,46 @@ fish_add_path ~/.local/bin
 
 ## Usage
 
-Simply run:
+**Full Interactive App:**
 
 ```bash
 todo
 ```
+
+**Quick View (for terminal startup):**
+
+```bash
+todo --quick
+# or
+todo -q
+```
+
+Shows a compact, read-only view of active todos **once per login session**. Perfect for adding to your shell's rc file!
+
+**Force show (bypass session check):**
+```bash
+todo --quick --force
+# or
+todo -q -f
+```
+
+### Shell Integration
+
+Add to your `.bashrc`, `.zshrc`, or `.config/fish/config.fish` to see todos on your **first terminal launch** after login:
+
+**Bash/Zsh:**
+```bash
+# Add to ~/.bashrc or ~/.zshrc
+todo --quick
+```
+
+**Fish:**
+```fish
+# Add to ~/.config/fish/config.fish
+todo --quick
+```
+
+**How it works:** The quick view automatically tracks if it's been shown this login session using a temporary file in `/tmp` (cleared on reboot). This means you'll see your todos once when you first log in, but not on every new terminal window.
 
 ### Keyboard Controls
 

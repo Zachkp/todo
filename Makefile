@@ -1,4 +1,4 @@
-.PHONY: build install clean run
+.PHONY: build install clean run quick
 
 build:
 	go build -o todo
@@ -11,3 +11,6 @@ clean:
 
 run: build
 	./todo
+
+quick: build
+	./todo --quick
