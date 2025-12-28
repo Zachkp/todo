@@ -35,7 +35,39 @@ func markShownThisSession() error {
 	return nil
 }
 
+// isInteractiveShell checks if we're in a proper interactive shell
+// Prevents running during boot, login managers (ly, gdm), or grub
+func isInteractiveShell() bool {
+	// Check for SHELL environment variable - this is set in interactive shells
+	shell := os.Getenv("SHELL")
+	if shell == "" {
+		// No SHELL env var = likely not in a user shell (boot/login manager)
+		return false
+	}
+
+	// Check for SHLVL (shell level) - should be >= 1 for interactive shells
+	// During boot/login managers, this is often unset or 0
+	shlvl := os.Getenv("SHLVL")
+	if shlvl == "" || shlvl == "0" {
+		return false
+	}
+
+	// Additional check: TERM should be set (but allow "linux" for TTY sessions)
+	term := os.Getenv("TERM")
+	if term == "" || term == "dumb" {
+		// Empty or dumb terminal = likely not interactive
+		return false
+	}
+
+	return true
+}
+
 func showQuickView(force bool) {
+	// Don't run in non-interactive environments (boot, login managers, etc.)
+	if !isInteractiveShell() {
+		return
+	}
+
 	// Check if already shown this session (unless forced)
 	if !force && hasShownThisSession() {
 		// Silently exit - already shown this session

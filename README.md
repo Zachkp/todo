@@ -117,7 +117,7 @@ todo --quick
 todo --quick
 ```
 
-**How it works:** The quick view automatically tracks if it's been shown this login session using a temporary file in `/tmp` (cleared on reboot). This means you'll see your todos once when you first log in, but not on every new terminal window.
+**How it works:** The quick view automatically tracks if it's been shown this login session using a temporary file in `/tmp` (cleared on reboot). It only runs in interactive shells (checks for `$SHELL` and `$SHLVL` environment variables), so it won't interfere with boot processes, login managers (ly, gdm), or grub. You'll see your todos once when you first log in, but not on every new terminal window.
 
 ### Keyboard Controls
 
