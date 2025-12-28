@@ -31,13 +31,13 @@ func markShownThisSession() error {
 }
 
 func isInteractiveShell() bool {
-	shell := os.Getenv("SHELL")
-	if shell == "" {
+	shlvl := os.Getenv("SHLVL")
+	if shlvl == "" || shlvl == "0" || shlvl == "1" {
 		return false
 	}
 
-	shlvl := os.Getenv("SHLVL")
-	if shlvl == "" || shlvl == "0" {
+	shell := os.Getenv("SHELL")
+	if shell == "" {
 		return false
 	}
 
