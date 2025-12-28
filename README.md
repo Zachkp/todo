@@ -7,12 +7,14 @@ A beautiful terminal-based todo application built with Go and [Bubbletea](https:
 ## Features
 
 - **Full CRUD Operations** - Create, Read, Update, and Delete todos
+- **Sub-Todos** - Break down tasks into checkable sub-items using `- ` in description
 - **Persistent Storage** - All todos saved to CSV file in `~/Documents/todos.csv`
 - **Interactive TUI** - Beautiful terminal user interface with keyboard navigation
-- **Detail View** - Popup window showing full todo information
-- **Task Completion** - Toggle tasks as complete/incomplete
+- **Detail View** - Popup window showing full todo information with sub-todo navigation
+- **Task Completion** - Toggle tasks and sub-todos as complete/incomplete
 - **Multi-line Descriptions** - Support for detailed todo descriptions
 - **Filtering** - Filter between All, Completed, and Active todos
+- **Progress Tracking** - Automatic progress indicators (e.g., "2/5 done") for sub-todos
 
 ## Installation
 
@@ -99,7 +101,8 @@ todo
 | Key | Action |
 |-----|--------|
 | `enter` or `esc` | Back to table |
-| `space` | Toggle completion |
+| `space` | Toggle sub-todo completion |
+| `↑/↓` | Navigate sub-todos |
 | `d` | Delete todo |
 
 #### Add/Edit View
@@ -109,6 +112,15 @@ todo
 | `ctrl+s` | Save todo |
 | `tab` | Switch between title and description |
 | `esc` | Cancel and return to table |
+
+**Sub-Todos Tip:** In the description field, start a line with `- ` to create a sub-todo:
+```
+Buy groceries
+- Milk
+- Eggs
+- Bread
+```
+These will automatically become checkable sub-todos!
 
 ## Screenshots
 

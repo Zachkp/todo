@@ -8,6 +8,12 @@ import (
 	"github.com/charmbracelet/bubbles/textinput"
 )
 
+type SubTodo struct {
+	ID        int
+	Title     string
+	Completed bool
+}
+
 type Todo struct {
 	ID          int
 	Title       string
@@ -15,6 +21,7 @@ type Todo struct {
 	Completed   bool
 	CreatedAt   time.Time
 	CompletedAt time.Time
+	SubTodos    []SubTodo
 }
 
 type viewMode int
@@ -35,13 +42,14 @@ const (
 )
 
 type model struct {
-	table      table.Model
-	todos      []Todo
-	mode       viewMode
-	filter     filterMode
-	titleInput textinput.Model
-	descInput  textarea.Model
-	editingID  int
-	width      int
-	height     int
+	table          table.Model
+	todos          []Todo
+	mode           viewMode
+	filter         filterMode
+	titleInput     textinput.Model
+	descInput      textarea.Model
+	editingID      int
+	selectedSubIdx int
+	width          int
+	height         int
 }

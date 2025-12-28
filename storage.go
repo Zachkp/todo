@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/csv"
+	"encoding/json"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -54,6 +55,11 @@ func loadTodos() ([]Todo, error) {
 			completedAt, _ = time.Parse(time.RFC3339, record[5])
 		}
 
+		var subTodos []SubTodo
+		if len(record) > 6 && record[6] != "" {
+			json.Unmarshal([]byte(record[6]), &subTodos)
+		}
+
 		todos = append(todos, Todo{
 			ID:          id,
 			Title:       record[1],
@@ -61,6 +67,7 @@ func loadTodos() ([]Todo, error) {
 			Completed:   completed,
 			CreatedAt:   createdAt,
 			CompletedAt: completedAt,
+			SubTodos:    subTodos,
 		})
 	}
 
@@ -77,7 +84,7 @@ func saveTodos(todos []Todo) error {
 	writer := csv.NewWriter(file)
 	defer writer.Flush()
 
-	writer.Write([]string{"ID", "Title", "Description", "Completed", "CreatedAt", "CompletedAt"})
+	writer.Write([]string{"ID", "Title", "Description", "Completed", "CreatedAt", "CompletedAt", "SubTodos"})
 
 	for _, todo := range todos {
 		createdAt := ""
@@ -89,6 +96,12 @@ func saveTodos(todos []Todo) error {
 			completedAt = todo.CompletedAt.Format(time.RFC3339)
 		}
 
+		subTodosJSON := ""
+		if len(todo.SubTodos) > 0 {
+			data, _ := json.Marshal(todo.SubTodos)
+			subTodosJSON = string(data)
+		}
+
 		record := []string{
 			strconv.Itoa(todo.ID),
 			todo.Title,
@@ -96,6 +109,7 @@ func saveTodos(todos []Todo) error {
 			strconv.FormatBool(todo.Completed),
 			createdAt,
 			completedAt,
+			subTodosJSON,
 		}
 		if err := writer.Write(record); err != nil {
 			return err

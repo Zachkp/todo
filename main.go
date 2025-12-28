@@ -74,11 +74,12 @@ func main() {
 	ta.SetHeight(5)
 
 	m := model{
-		table:      t,
-		todos:      todos,
-		mode:       tableView,
-		titleInput: ti,
-		descInput:  ta,
+		table:          t,
+		todos:          todos,
+		mode:           tableView,
+		titleInput:     ti,
+		descInput:      ta,
+		selectedSubIdx: 0,
 	}
 
 	if _, err := tea.NewProgram(m, tea.WithAltScreen()).Run(); err != nil {

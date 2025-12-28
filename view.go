@@ -89,11 +89,34 @@ func (m model) renderDetailView() string {
 	if !todo.CompletedAt.IsZero() {
 		content += fmt.Sprintf("Completed: %s\n", todo.CompletedAt.Format("Jan 2, 2006 at 3:04 PM"))
 	}
+
+	// Sub-todos section
+	if len(todo.SubTodos) > 0 {
+		content += "\nSub-Todos:\n"
+		for i, sub := range todo.SubTodos {
+			checkbox := "[ ]"
+			if sub.Completed {
+				checkbox = "[✓]"
+			}
+
+			subLine := fmt.Sprintf("  %s %s", checkbox, sub.Title)
+			if i == m.selectedSubIdx {
+				subLine = lipgloss.NewStyle().
+					Background(lipgloss.Color("57")).
+					Foreground(lipgloss.Color("229")).
+					Render(subLine)
+			}
+			content += subLine + "\n"
+		}
+	}
+
 	content += "\n"
 
-	content += lipgloss.NewStyle().Foreground(lipgloss.Color("241")).Render(
-		"[enter/esc] back  [space] toggle  [d] delete",
-	)
+	helpText := "[enter/esc] back  [d] delete"
+	if len(todo.SubTodos) > 0 {
+		helpText = "[enter/esc] back  [space] toggle sub  [↑↓] navigate  [d] delete"
+	}
+	content += lipgloss.NewStyle().Foreground(lipgloss.Color("241")).Render(helpText)
 
 	popup := popupStyle.Width(popupWidth).Render(content)
 	return lipgloss.Place(
@@ -128,7 +151,11 @@ func (m model) renderEditView() string {
 
 	content := titleStyle.Render(title) + "\n\n"
 	content += "Title:\n" + m.titleInput.View() + "\n\n"
-	content += "Description:\n" + m.descInput.View() + "\n\n"
+	content += "Description:\n" + m.descInput.View() + "\n"
+	content += lipgloss.NewStyle().Foreground(lipgloss.Color("241")).Render(
+		"(Use '- ' at start of line for sub-todos)",
+	) + "\n\n"
+
 	content += lipgloss.NewStyle().Foreground(lipgloss.Color("241")).Render(
 		"[ctrl+s] save  [tab] switch field  [esc] cancel",
 	)

@@ -84,8 +84,21 @@ func (m model) handleTableViewKeys(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 			m.mode = editView
 			m.editingID = todo.ID
 			m.titleInput.SetValue(todo.Title)
-			m.descInput.SetValue(todo.Description)
+
+			// Rebuild description with sub-todos
+			desc := todo.Description
+			if len(todo.SubTodos) > 0 {
+				if desc != "" {
+					desc += "\n"
+				}
+				for _, sub := range todo.SubTodos {
+					desc += "- " + sub.Title + "\n"
+				}
+			}
+			m.descInput.SetValue(strings.TrimSpace(desc))
+
 			m.titleInput.Focus()
+			m.selectedSubIdx = 0
 		}
 		return m, nil
 	case "d":
@@ -116,21 +129,37 @@ func (m model) handleTableViewKeys(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 }
 
 func (m model) handleDetailViewKeys(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
+	todo := m.getCurrentTodo()
+	if todo == nil {
+		return m, nil
+	}
+
 	switch msg.String() {
 	case "esc", "q", "enter":
 		m.mode = tableView
+		m.selectedSubIdx = 0
 		return m, nil
 	case "d":
-		todo := m.getCurrentTodo()
-		if todo != nil {
-			m.deleteTodo(todo.ID)
-			m.mode = tableView
-		}
+		m.deleteTodo(todo.ID)
+		m.mode = tableView
+		m.selectedSubIdx = 0
 		return m, nil
 	case " ":
-		todo := m.getCurrentTodo()
-		if todo != nil {
+		// Toggle sub-todo if we have sub-todos, otherwise toggle main todo
+		if len(todo.SubTodos) > 0 && m.selectedSubIdx < len(todo.SubTodos) {
+			m.toggleSubTodo(m.selectedSubIdx)
+		} else {
 			m.toggleComplete(todo.ID)
+		}
+		return m, nil
+	case "up":
+		if len(todo.SubTodos) > 0 && m.selectedSubIdx > 0 {
+			m.selectedSubIdx--
+		}
+		return m, nil
+	case "down":
+		if len(todo.SubTodos) > 0 && m.selectedSubIdx < len(todo.SubTodos)-1 {
+			m.selectedSubIdx++
 		}
 		return m, nil
 	}
